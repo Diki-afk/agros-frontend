@@ -9,6 +9,7 @@ import axios from "axios";
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 let config = {
+  baseURL: process.env.VUE_APP_API_URL + '/api',
   // baseURL: process.env.baseURL || process.env.apiUrl || ""
   // timeout: 60 * 1000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
@@ -39,7 +40,8 @@ _axios.interceptors.response.use(
   }
 );
 
-Plugin.install = function(Vue) {
+// eslint-disable-next-line no-unused-vars
+Plugin.install = function(Vue, _options) {
   Vue.axios = _axios;
   window.axios = _axios;
   Object.defineProperties(Vue.prototype, {

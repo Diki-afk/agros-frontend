@@ -98,6 +98,7 @@ export default {
    data () {
        return{
            valid: true,
+           email: "",
            emailRules: [
                v => !!v || 'E-mail is required',
                v => /([a-zA-Z0-9_]{1,})(@)([a-zA-Z0-9_]{2,}).([a-zA-Z0-9_]{2,})+/.test(v) || 'E-mail must be valid'
@@ -128,22 +129,37 @@ export default {
                 }
                 this.axios.post('/login', formData)
                 .then((response) => {
-                    let {data} = response.data
-                    this.setAuth(data)
-                    if (this.user.id>0) {
-                        this.setAlert({
-                            status: true,
-                            color : 'success',
-                            text : 'Login success',
-                        })
-                        this.close()
-                    }else{
+                    let token = response.data;
+                    let params = {
+                        'token' : token.token
+                    }
+                    this.axios.post('/get_user', params)
+                    .then((result) =>{
+                        let data = result.data
+                        console.log(data)
+                        this.setAuth(data)
+                        if (this.user.id>0) {
+                            this.setAlert({
+                                status: true,
+                                color : 'success',
+                                text : 'Login success',
+                            })
+                            this.close()
+                        }else{
+                            this.setAlert({
+                                status: true,
+                                color : 'error',
+                                text : 'Login failed',
+                            })
+                        }
+                    }).catch((error)=> {
+                        let data = error.response
                         this.setAlert({
                             status: true,
                             color : 'error',
-                            text : 'Login failed',
+                            text : data.message,
                         })
-                    }
+                    })
                 })
                 .catch((error)=> {
                     let {data} = error.response

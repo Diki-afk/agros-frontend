@@ -74,6 +74,7 @@
                         label="E-mail"
                         :rules="emailRules"
                         required
+                        disabled
                         append-icon="mdi-email"
                     >
                     </v-text-field>
@@ -95,21 +96,6 @@
                     >
                     </v-text-field>
                 </v-col>
-                <v-col
-                    md="6"
-                    cols="12"
-                >
-                    <v-select
-                        color="#459467"
-                        v-model="role"
-                        label="Role"
-                        :rules="roleRules"
-                        required
-                        append-icon="mdi-passport"
-                    >
-                    
-                    </v-select>
-                </v-col>
             </v-row>
             <v-row>
                 <v-col
@@ -130,7 +116,6 @@
                     </div>
                 </v-col>
             </v-row>
-               
             </v-form>
         </v-container>
        <div class=" px-3">
@@ -149,7 +134,7 @@ export default {
     data() {
         return {
             valid: true,
-            name: '',
+            name: `${this.user.name}`,
             nameRules: [
                 v => !!v || 'Nama Wajib Diisi',
                 v => (v && v.length <= 200) || 'Name must be less than 255 character'
@@ -160,7 +145,7 @@ export default {
                v => !!v || 'Password Wajib diisi',
                v => (v && v.length >= 6) || 'Min 6 characters',
            ],
-           cityName: '',
+           cityName: `${this.user.city_name}`,
            cityNameRules: [
                v => !!v || 'Nama Kota Wajib Diisi',
                v =>  (v && v.length >= 12,[0-9])|| 'cityName number invalid'
@@ -183,7 +168,8 @@ export default {
                 formData.set('name', this.name)
                 formData.set('password', this.password)
                 formData.set('cityName', this.cityName)
-                this.axios.post('/register', formData)
+                formData.set('token', this.user.token)
+                this.axios.post(`/update/${this.user.id}`, formData)
                     .then((response) => {
                         let {data} = response.data
                         this.setAuth(data)

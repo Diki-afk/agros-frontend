@@ -10,21 +10,6 @@ Vue.use(VueRouter)
     name: 'Home',
     component: Home
   },
-  {
-    path: '/about',//mendaftarkan view about pada vue-router 
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  },
-  {
-    path: '/profile',//mendaftarkan view profile pada vue-router
-    name: 'profile',
-    component: () => import(
-      '../views/Profile.vue'),
-      meta: {auth:true}  
-  }
 ]
 
 const router = new VueRouter({

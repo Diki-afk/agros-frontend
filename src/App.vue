@@ -19,7 +19,7 @@
         <!--componen cart didalam view home-->       
        
     <v-container class="mx-auto py-0">
-      <v-row align="cnter">
+      <v-row align="center">
         
         <v-spacer />
 
@@ -82,25 +82,8 @@
                 </v-list-item>
 
               <v-list shaped>
-                <template v-for="(item, index) in navigation">
-                  <v-list-item
-                    :key="`menu-`+index"
-                    :to="item.route"
-                    v-if="!item.auth || (item.auth && !guest)"
-                  >
-              
-                    <v-list-item-icon>
-                        <v-icon size="30px">{{item.icon}}</v-icon>
-                    </v-list-item-icon>
-
-                    <v-list-item-content>
-                      <v-list-item-title>{{item.title}}</v-list-item-title>
-                    </v-list-item-content>
                 
-                  </v-list-item>
-                </template>
-              </v-list>
-              
+              </v-list> 
             </v-list>
 
             <template v-slot:append v-if="!guest">
@@ -153,11 +136,6 @@ export default {
   },
   data: () => ({
     drawer: false,
-    navigation: [// dari navigasi atau side menu
-      {title: 'Tentang', icon: 'mdi-home-modern', route: '/about'},//route about
-      {title: 'Profil', icon: 'mdi-account', route: '/profile', auth: true},//route profile akan muncul jika sudah login=true
-    ],
-  
   }),
   computed: {
     Home() {
