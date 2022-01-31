@@ -69,6 +69,7 @@ export default {
       setDialogComponent : 'dialog/setComponent',
       setAuth : 'auth/set',
       setAlert : 'alert/set',
+      setUsers : 'users/set'
     }),
     logout(){//function logout
       let config = {
@@ -79,8 +80,10 @@ export default {
         .then((response) => {//success
         if(response.data.status=="Token is Expired"){
             this.setAuth({})
+            this.setUsers({})
         }    
           this.setAuth({})
+          this.setUsers({})
           this.setAlert({
             status : true,
             color : 'success',

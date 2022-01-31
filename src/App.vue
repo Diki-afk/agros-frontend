@@ -152,6 +152,7 @@ export default {
       setDialogComponent : 'dialog/setComponent',//mapping action setComponent yang ada pada stre dialog
       setAuth : 'auth/set',//mapping action set yang ada pada store auth
       setAlert: 'alert/set',//mapping action set yang ada pada store alert
+      setUsers: 'users/set',
     }),
     logout(){//function logout
       let config = {
@@ -160,6 +161,7 @@ export default {
     this.axios.post('/logout',config)//ajax dari api laravel http/tugasakhir.test/v1/logout
       //promise
       .then(() => {//success
+        this.setUsers({})
         this.setAuth({})//kosongkan auth ketika sudah logout
         this.setAlert({//tampilkan alert success
           status : true,
