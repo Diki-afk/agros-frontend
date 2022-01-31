@@ -3,8 +3,6 @@
     <h5 class="display-3 text-h5 font-weight-bold ml-5">Layanan Agros Indonesia</h5>
     <v-container class="pa-0" grid-list-sm>
         <v-layout wrap>
-            <!--menampilkan category menggunakan ajax dari axios
-            random-->
             <v-flex md4 sm6 xs12 >
                 <v-card
                     class="mx-5 my-12 rounded-lg"

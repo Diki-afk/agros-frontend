@@ -12,7 +12,10 @@
         <v-col
           cols="12"
         >
-          <h3 class="display-3 text-h4 font-weight-bold white--text mb-5 mt-4 ml-2">
+          <h3 class="display-3 text-h4 font-weight-bold white--text mb-5 mt-4 ml-2" v-if="!guest">
+            Selamat Datang, {{user.name}}!
+          </h3>
+          <h3 class="display-3 text-h4 font-weight-bold white--text mb-5 mt-4 ml-2" v-else>
             Selamat Datang, Kerabat!
           </h3>
 
@@ -21,9 +24,15 @@
             Melayani dengan sepenuh hati untuk kenyamanan anda dan keamanan barang sampai pada tujuan.<br>
             Silahkan melakukan pendaftaran untuk dapat menikmati layanan kami
           </div>
-
-          <v-btn outlined class="ma-1" color="white" @click="setDialogComponent('login')">Masuk</v-btn>
-          <v-btn outlined class="ma-1" color="white" @click="setDialogComponent('register')">Daftar</v-btn>
+          <template v-if="!guest">
+              <v-btn outlined class="ma-1" color="white" @click="logout">
+                Keluar
+              </v-btn>
+          </template>
+          <template v-else>
+              <v-btn outlined class="ma-1" color="white" @click="setDialogComponent('login')">Masuk</v-btn>
+              <v-btn outlined class="ma-1" color="white" @click="setDialogComponent('register')">Daftar</v-btn>
+          </template>
         </v-col>
       </v-row>
     </v-img>
@@ -31,32 +40,62 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'vuex';//digunakan untuk memanggil action dan getters pada vuex yang digunakan untuk mapping action dan mapping getters
+import {mapActions, mapGetters} from 'vuex';
 export default {
     name: 'HomeBanner',
     computed: {
     Home() {
-      return (this.$route.path==='/')//mengecek route apakah sudah pada ke home
+      return (this.$route.path==='/')
     },
     ...mapGetters({
-      dialogStatus : 'dialog/status',//mapping getters status yang ada pada store dialog
-      currentComponent: 'dialog/component',//mapping getters component yang ada pada store dialog
+      dialogStatus : 'dialog/status',
+      user : 'auth/user',
+      guest: 'auth/guest',
+      currentComponent: 'dialog/component',
       
     }),
     dialog: {
       get() {
-        return this.dialogStatus//mendapatkan nilai dialogStatus
+        return this.setDialogStatus
       },
       set(value){
-        this.setDialogStatus(value)//mengeset nilai yang didapat dari action setDialogstatus
+        this.setDialogStatus(value)
       }
     }
   },
   methods: {
     ...mapActions({
-      setDialogStatus : 'dialog/setStatus',//mapping action setStatus yang ada pada store dialog 
-      setDialogComponent : 'dialog/setComponent',//mapping action setComponent yang ada pada stre dialog
+      setDialogStatus : 'dialog/setStatus',
+      setDialogComponent : 'dialog/setComponent',
+      setAuth : 'auth/set',
+      setAlert : 'alert/set',
     }),
-  },
-  }
+    logout(){//function logout
+      let config = {
+       token: this.user.token
+      }
+      this.axios.post('/logout',config)
+        // eslint-disable-next-line no-unused-vars
+        .then((response) => {//success
+        if(response.data.status=="Token is Expired"){
+            this.setAuth({})
+        }    
+          this.setAuth({})
+          this.setAlert({
+            status : true,
+            color : 'success',
+            text : 'Logout successfully'
+          })
+        })
+        .catch((error) =>{//error
+          let {data} = error.response
+          this.setAlert({
+            status: true,
+            color : 'error',
+            text : data.message
+          })
+        })
+      }
+    },
+}
 </script>

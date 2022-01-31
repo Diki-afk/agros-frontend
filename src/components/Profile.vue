@@ -23,7 +23,7 @@
                 cols="12"
                 >
                 <h3 class="display-3 text-h4 font-weight-bold mb-4">
-                   Daftar Sekarang
+                   Update Profil
                 </h3>
 
                 <div class="subheading text-capitalize pl-2 mb-4">
@@ -70,10 +70,7 @@
                 >
                     <v-text-field
                         color="#459467"
-                        v-model="email"
                         label="E-mail"
-                        :rules="emailRules"
-                        required
                         disabled
                         append-icon="mdi-email"
                     >
@@ -127,14 +124,14 @@
 <script>
 import {mapGetters, mapActions} from 'vuex'
 export default {
-    name: 'register',
+    name: 'profile',
     components:{
         Testimony: () => import("@/components/home/Testimony"),
     },
     data() {
         return {
             valid: true,
-            name: `${this.user.name}`,
+            name: '',
             nameRules: [
                 v => !!v || 'Nama Wajib Diisi',
                 v => (v && v.length <= 200) || 'Name must be less than 255 character'
@@ -145,10 +142,9 @@ export default {
                v => !!v || 'Password Wajib diisi',
                v => (v && v.length >= 6) || 'Min 6 characters',
            ],
-           cityName: `${this.user.city_name}`,
+           cityName: '',
            cityNameRules: [
                v => !!v || 'Nama Kota Wajib Diisi',
-               v =>  (v && v.length >= 12,[0-9])|| 'cityName number invalid'
            ],
         }
     },
@@ -156,6 +152,15 @@ export default {
         ...mapGetters({
             user: 'auth/user',
         }),
+    },
+    watch: {
+        user: {
+            handler() {
+                this.name = this.user.name
+                this.cityName = this.user.city_name
+            },
+            immediate: true,
+        },
     },
     methods: {
         ...mapActions({
@@ -167,16 +172,17 @@ export default {
                 let formData = new FormData()
                 formData.set('name', this.name)
                 formData.set('password', this.password)
-                formData.set('cityName', this.cityName)
+                formData.set('city_name', this.cityName)
                 formData.set('token', this.user.token)
-                this.axios.post(`/update/${this.user.id}`, formData)
+                this.axios.post(`/update`, formData)
                     .then((response) => {
-                        let {data} = response.data
-                        this.setAuth(data)
+                        let data = response.data
+                        data.data.token = response.data.token
+                        this.setAuth(data.data)
                         this.setAlert({
                             status: true,
                             color: 'success',
-                            text: 'Register success',
+                            text: 'Update Profile sukses',
                         })
                         this.close()
                     })

@@ -1,7 +1,7 @@
 export default{
     namespaced: true,
     state: {
-        user : {},//state user bertipe objek yang berisi data user
+        user : {},
     },
     mutations: {
         set: (state, payload) => {
@@ -10,11 +10,11 @@ export default{
     },
     actions: {
         set: ({commit}, payload) => {
-            commit('set', payload)//digunakan untuk mengeset data user yang sudah login pada state user
+            commit('set', payload)
         },
     },
     getters: {
-        user: state => state.user,//digunakan untuk mengecek apakah user sudah login atau belum
+        user: state => state.user,
         guest : state => Object.keys(state.user).length === 0,
     }
 }

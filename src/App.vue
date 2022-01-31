@@ -33,7 +33,7 @@
         <v-btn
           class="hidden-sm-and-down"
           text
-          @click="onClick($event, link)"
+          @click="setDialogComponent('profile')"
         >
           Profil
         </v-btn>
@@ -85,16 +85,6 @@
                 
               </v-list> 
             </v-list>
-
-            <template v-slot:append v-if="!guest">
-                <div class="pa-2">
-                  <v-btn block color="danger" dark @click="logout">
-                    <v-icon left>mdi-lock</v-icon>
-                    <!--component logout pada sidebar-->
-                    logout
-                  </v-btn>
-                </div>
-              </template>
           </v-navigation-drawer>
         </v-card>
         <keep-alive>
@@ -108,7 +98,6 @@
       <!-- body -->
         <v-container fluid>
           <v-slide-x-transition>
-            <!-- menampilkan hasil dari vue router -->
             <router-view><!--untuk menampilkan konten utama--></router-view>
           </v-slide-x-transition>
         </v-container>
@@ -133,6 +122,7 @@ export default {
     Alert: () => import('@/components/Alert.vue'),//komponen alert
     Login : () => import('@/components/Login.vue'),//komponen login
     Register: () => import('@/components/Register.vue'),//komponen register
+    Profile: () => import('@/components/Profile.vue'),//komponen profile
   },
   data: () => ({
     drawer: false,
@@ -146,7 +136,6 @@ export default {
       user : 'auth/user',//mapping getters user yang ada pada store auth
       dialogStatus : 'dialog/status',//mapping getters status yang ada pada store dialog
       currentComponent: 'dialog/component',//mapping getters component yang ada pada store dialog
-      
     }),
     dialog: {
       get() {
@@ -166,11 +155,9 @@ export default {
     }),
     logout(){//function logout
       let config = {
-        headers: {//autorisasi untuk logout adalah dengan bearer token yang didapat saat user login dan digenerate token pada laravel
-        'Authorization': 'Bearer ' + this.user.api_token, 
-      },
+       token: this.user.token
     }
-    this.axios.post('/logout', {}, config)//ajax dari api laravel http/tugasakhir.test/v1/logout
+    this.axios.post('/logout',config)//ajax dari api laravel http/tugasakhir.test/v1/logout
       //promise
       .then(() => {//success
         this.setAuth({})//kosongkan auth ketika sudah logout

@@ -102,6 +102,7 @@
                     <v-select
                         color="#459467"
                         v-model="role"
+                        :items="['Customer', 'Admin']"
                         label="Role"
                         :rules="roleRules"
                         required
@@ -168,7 +169,10 @@ export default {
            cityName: '',
            cityNameRules: [
                v => !!v || 'Nama Kota Wajib Diisi',
-               v =>  (v && v.length >= 12,[0-9])|| 'cityName number invalid'
+           ],
+           role: '',
+           roleRules: [
+               v => !!v || 'Role Wajib dipilih',
            ],
         }
     },
@@ -188,15 +192,15 @@ export default {
                 formData.set('name', this.name)
                 formData.set('email', this.email)
                 formData.set('password', this.password)
-                formData.set('cityName', this.cityName)
+                formData.set('city_name', this.cityName)
+                formData.set('role', this.role)
                 this.axios.post('/register', formData)
+                    // eslint-disable-next-line no-unused-vars
                     .then((response) => {
-                        let {data} = response.data
-                        this.setAuth(data)
                         this.setAlert({
                             status: true,
                             color: 'success',
-                            text: 'Register success',
+                            text: 'Register sukses, Silahkan melakukan Login',
                         })
                         this.close()
                     })

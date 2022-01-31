@@ -136,8 +136,8 @@ export default {
                     this.axios.post('/get_user', params)
                     .then((result) =>{
                         let data = result.data
-                        console.log(data)
-                        this.setAuth(data)
+                        data.user.token = token.token
+                        this.setAuth(data.user)
                         if (this.user.id>0) {
                             this.setAlert({
                                 status: true,
