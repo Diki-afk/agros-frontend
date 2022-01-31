@@ -33,7 +33,7 @@
                       {{ user.city_name }}
                     </v-chip>
                   </v-card-text>
-                  <v-card-actions>
+                  <v-card-actions v-if="auth.role==1">
                     <v-spacer></v-spacer>
                     <v-btn color="error" @click="deleteUser(user)" outlined>Hapus</v-btn>
                   </v-card-actions>
@@ -56,7 +56,7 @@ import {mapGetters, mapActions} from 'vuex';
     computed:{
        ...mapGetters({
         dialogStatus : 'dialog/status',
-        user : 'auth/user',
+        auth : 'auth/user',
         guest: 'auth/guest',
         users: 'users/users'
       }),
@@ -64,7 +64,7 @@ import {mapGetters, mapActions} from 'vuex';
     mounted() {
       let config = {
         headers: {
-          'Authorization': 'Bearer ' + this.user.token
+          'Authorization': 'Bearer ' + this.auth.token
         }
       }
       this.axios.get('/users', config).then(response => {
@@ -83,11 +83,11 @@ import {mapGetters, mapActions} from 'vuex';
         this.removeUser(value)
         let formData = {
           "id": value.id,
-          "token": this.user.token
+          "token": this.auth.token
         }
         let config = {
           headers: {
-            'Authorization': 'Bearer ' + this.user.token
+            'Authorization': 'Bearer ' + this.auth.token
           }
         }
         this.axios.post('/delete', formData, config)
