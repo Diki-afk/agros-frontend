@@ -120,6 +120,7 @@ export default {
         ...mapActions({
             setAlert : 'alert/set',
             setAuth : 'auth/set',
+            setUsers: 'users/set',
         }),
         submit () {
             if (this.$refs.form.validate()) {
@@ -159,6 +160,15 @@ export default {
                             color : 'error',
                             text : data.message,
                         })
+                    })
+
+                    let config = {
+                        headers: {
+                        'Authorization': 'Bearer ' + token.token
+                        }
+                    }
+                    this.axios.get('/users', config).then(response => {
+                        this.setUsers(response.data.user)
                     })
                 })
                 .catch((error)=> {

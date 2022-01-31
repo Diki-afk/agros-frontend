@@ -62,20 +62,11 @@ import {mapGetters, mapActions} from 'vuex';
       }),
     },
     mounted() {
-      let config = {
-        headers: {
-          'Authorization': 'Bearer ' + this.auth.token
-        }
-      }
-      this.axios.get('/users', config).then(response => {
-        this.setUsers(response.data.user)
-          
-      })
+      
     },
     methods: {
       ...mapActions({
             setAlert : 'alert/set',
-            setUsers: 'users/set',
             removeUser: 'users/remove'
       }),
       deleteUser(value){
